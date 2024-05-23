@@ -47,4 +47,6 @@ h1 {
 .photographer_section article img {
     height: 200px;
     width: 200px;
+    border-radius: 50%;
+    box-shadow:  0px 0px 1px 0px #000000;
 }
