@@ -1,6 +1,6 @@
 # FishEye : Nouveau Prototype du Site Web
 
-![Logo FishEye](assets/images/logo/logo.png)
+![Logo FishEye](assets/images/logo.png)
 
 ## Description du Projet
 
