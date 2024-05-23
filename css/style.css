@@ -50,3 +50,23 @@ h1 {
     border-radius: 50%;
     box-shadow:  0px 0px 1px 0px #000000;
 }
+.photographer_section article h3 {
+    margin: 3px;
+    font-size: 13px;
+    font-weight: 400;
+    color: #901C1C;
+    
+    }
+
+.photographer_section article h4 {
+    margin: 3px;
+    font-size: 10px;
+    font-weight: 400;
+}
+
+.photographer_section article p {
+    margin: 3px;
+    font-size: 9px;
+    font-weight: 400;
+    color: #757575;
+}
