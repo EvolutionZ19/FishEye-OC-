@@ -5,12 +5,11 @@ async function getPhotographers() {
       return { photographers: data.photographers };
     } catch (error) {
       console.error("Erreur lors du chargement des données :", error);
-      // Gérer l'erreur de manière appropriée
     }
   }
   
   function photographerTemplate(data) {
-    const { name, portrait, city, country, tagline, price } = data;
+    const { name, portrait, city, country, tagline, price, id } = data; 
   
     function getUserCardDOM() {
       const article = document.createElement("article");
@@ -36,6 +35,11 @@ async function getPhotographers() {
       priceElement.textContent = `${price}€/jour`;
       article.appendChild(priceElement);
   
+      // Gestionnaire d'événements pour le clic
+      article.addEventListener("click", () => {
+        window.location.href = `photographer.html?id=${id}`; // Redirection vers la page du photographe
+      });
+  
       return article;
     }
   
@@ -44,7 +48,7 @@ async function getPhotographers() {
   
   async function displayData(photographers) {
     const photographersSection = document.querySelector(".photographer_section");
-    photographersSection.innerHTML = ""; // Effacer le contenu précédent
+    photographersSection.innerHTML = "";
   
     photographers.forEach((photographer) => {
       const photographerModel = photographerTemplate(photographer);
