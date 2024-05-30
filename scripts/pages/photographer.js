@@ -15,52 +15,94 @@ async function getPhotographer() {
 function photographerTemplate(data) {
     const { name, portrait, city, country, tagline, price, tags } = data;
 
-    function getPhotographerDOM() {
-        const article = document.createElement("article");
+    // On récupère la div existante
+    const photographHeader = document.querySelector('.photograph-header');
 
-        const img = document.createElement("img");
-        img.src = `./assets/Sample Photos/Photographers ID Photos/${portrait}`;
-        img.alt = name;
-        img.classList.add("photographer__portrait");
-        article.appendChild(img);
+    // Création des éléments du profil
+    const img = document.createElement("img");
+    img.src = `./assets/Sample Photos/Photographers ID Photos/${portrait}`;
+    img.alt = name;
+    img.classList.add("photographer__portrait");
 
-        const h2 = document.createElement("h2");
-        h2.textContent = name;
-        article.appendChild(h2);
+    const h2 = document.createElement("h2");
+    h2.textContent = name;
 
-        const location = document.createElement("h3");
-        location.textContent = `${city}, ${country}`;
-        location.classList.add("photographer__location");
-        article.appendChild(location);
+    const location = document.createElement("h3");
+    location.textContent = `${city}, ${country}`;
+    location.classList.add("photographer__location");
 
-        const taglineElement = document.createElement("h4");
-        taglineElement.textContent = tagline;
-        taglineElement.classList.add("photographer__tagline");
-        article.appendChild(taglineElement);
+    const taglineElement = document.createElement("h4");
+    taglineElement.textContent = tagline;
+    taglineElement.classList.add("photographer__tagline");
 
-        const priceElement = document.createElement("p");
-        priceElement.textContent = `${price}€/jour`;
-        priceElement.classList.add("photographer__price");
-        article.appendChild(priceElement);
+    const priceElement = document.createElement("p");
+    priceElement.textContent = `${price}€/jour`;
+    priceElement.classList.add("photographer__price");
 
-        const tagsElement = document.createElement("ul");
-        tagsElement.classList.add("tags");
+    const tagsElement = document.createElement("ul");
+    tagsElement.classList.add("tags");
 
-        // Vérifier si tags est un tableau et s'il n'est pas vide
-        if (Array.isArray(tags) && tags.length > 0) {
-            tags.forEach((tag) => {
-                const tagElement = document.createElement("li");
-                tagElement.textContent = `#${tag}`;
-                tagsElement.appendChild(tagElement);
-            });
-        } // Pas besoin de else ici car les balise sont vides par défaut
-
-        article.appendChild(tagsElement);
-
-        return article;
+    // Vérifier si tags est un tableau et s'il n'est pas vide
+    if (Array.isArray(tags) && tags.length > 0) {
+        tags.forEach((tag) => {
+            const tagElement = document.createElement("li");
+            tagElement.textContent = `#${tag}`;
+            tagsElement.appendChild(tagElement);
+        });
     }
 
-    return getPhotographerDOM();
+    // Créer la div pour les informations du photographe
+    const photographerInfo = document.createElement("div");
+    photographerInfo.classList.add("photographer-info");
+
+    // Ajouter les éléments à la div photographer-info
+    photographerInfo.appendChild(h2);
+    photographerInfo.appendChild(location);
+    photographerInfo.appendChild(taglineElement);
+    photographerInfo.appendChild(priceElement);
+    photographerInfo.appendChild(tagsElement);
+
+    // Récupérer le bouton principal "Contactez-moi"
+    const contactButton = document.querySelector('.photograph-header .contact_button');
+
+    // Ajouter les éléments à la div principale
+    photographHeader.appendChild(photographerInfo);
+    photographHeader.appendChild(contactButton); // Ajout du bouton
+    photographHeader.appendChild(img);
+}
+
+// Fonction pour afficher la modale de contact
+function displayModal() {
+    const modal = document.getElementById("contact_modal");
+    modal.style.display = "block";
+
+    // Supprimer le bouton "Envoyer" de la modale
+    const modalButton = modal.querySelector(".contact_button");
+    if (modalButton) {
+        modalButton.remove(); 
+    }
+
+    // Récupérer le bouton principal "Contactez-moi"
+    const mainButton = document.querySelector('.photograph-header .contact_button');
+
+    // Cloner le bouton principal
+    const clonedButton = mainButton.cloneNode(true);
+
+    // Ajouter le bouton cloné à la modale
+    const modalForm = modal.querySelector('form');
+    modalForm.appendChild(clonedButton);
+}
+
+// Fonction pour fermer la modale de contact
+function closeModal() {
+    const modal = document.getElementById("contact_modal");
+    modal.style.display = "none";
+
+    // Supprimer le bouton cloné de la modale
+    const modalButton = modal.querySelector(".contact_button");
+    if (modalButton) {
+        modalButton.remove();
+    }
 }
 
 //récupérer et afficher les données du photographe
@@ -72,13 +114,7 @@ async function displayPhotographer() {
     if (photographerId) {
         const photographerData = await getPhotographer();
         if (photographerData) {
-            const photographerDOM = photographerTemplate(photographerData);
-
-            // Ciblez l'élément <main> existant
-            const mainElement = document.getElementById("main"); 
-
-            // Insérez le profil du photographe à la fin du <main>
-            mainElement.appendChild(photographerDOM);  
+            photographerTemplate(photographerData); // Appeler la fonction pour modifier la div
         } else {
             console.error("Aucun photographe trouvé avec cet ID.");
         }
