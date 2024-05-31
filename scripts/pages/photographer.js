@@ -35,12 +35,6 @@ function photographerTemplate(data) {
     taglineElement.textContent = tagline;
     taglineElement.classList.add("photographer__tagline");
 
-    const priceElement = document.createElement("p");
-    priceElement.textContent = `${price}€/jour`;
-    priceElement.classList.add("photographer__price");
-
-    const tagsElement = document.createElement("ul");
-    tagsElement.classList.add("tags");
 
     // Vérifier si tags est un tableau et s'il n'est pas vide
     if (Array.isArray(tags) && tags.length > 0) {
@@ -59,9 +53,7 @@ function photographerTemplate(data) {
     photographerInfo.appendChild(h2);
     photographerInfo.appendChild(location);
     photographerInfo.appendChild(taglineElement);
-    photographerInfo.appendChild(priceElement);
-    photographerInfo.appendChild(tagsElement);
-
+    
     // Récupérer le bouton principal "Contactez-moi"
     const contactButton = document.querySelector('.photograph-header .contact_button');
 
