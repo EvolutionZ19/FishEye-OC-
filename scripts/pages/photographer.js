@@ -73,9 +73,9 @@ async function photographerTemplate() {
     // Récupérer le bouton principal "Contactez-moi"
     const contactButton = document.querySelector('.photograph-header .contact_button');
 
-        photographHeader.appendChild(img);
-        photographHeader.appendChild(photographerInfo);
-        photographHeader.appendChild(contactButton);
+    photographHeader.appendChild(photographerInfo);
+    photographHeader.appendChild(contactButton);
+    photographHeader.appendChild(img);
 
         const mediaData = await getPhotographerMedia(photographerId);
         if (mediaData) {
