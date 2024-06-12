@@ -153,6 +153,8 @@ form input {
     padding: 0.5rem;
     text-align: center;
     color:#901C1C;
+    gap: 0.3rem;
+
 }
 
 .media-title-likes {
@@ -167,4 +169,7 @@ form input {
   
   .media-likes-right {
     text-align: right;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
   }
