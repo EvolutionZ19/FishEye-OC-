@@ -122,110 +122,128 @@ function closeModal() {
     }
 }
 
-// Fonction pour créer et afficher la galerie de médias (avec tri)
-function displayMediaGallery(media, photographerData) { 
+/// Fonction pour créer et afficher la galerie de médias (avec tri)
+function displayMediaGallery(media, photographerData) {
     const main = document.getElementById('main');
-
-    function sortByPopularity(mediaA, mediaB) {
-        return mediaB.likes - mediaA.likes;
-    }
-
-    function sortByDate(mediaA, mediaB) {
-        return new Date(mediaB.date) - new Date(mediaA.date);
-    }
-
-    function sortByTitle(mediaA, mediaB) {
-        return mediaA.title.localeCompare(mediaB.title);
-    }
-
-    media.sort(sortByPopularity);
-
-    const gallery = document.createElement('div');
-    gallery.classList.add('gallery');
-    main.appendChild(gallery);
-
+  
+    // 1. Créer le conteneur principal pour le tri
+    const sortContainer = document.createElement('div');
+    sortContainer.classList.add('sort-container');
+    main.appendChild(sortContainer);
+  
+    // 2. Ajouter le texte "Trier par :"
+    const sortLabel = document.createElement('span');
+    sortLabel.textContent = 'Trier par :';
+    sortLabel.classList.add('sort-label');
+    sortContainer.appendChild(sortLabel);
+  
+    // 3. Créer le conteneur des boutons de tri
     const sortButtonsContainer = document.createElement('div');
     sortButtonsContainer.classList.add('sort-buttons');
-    main.appendChild(sortButtonsContainer);
-
+    sortContainer.appendChild(sortButtonsContainer);
+  
+    // 4. Créer les boutons de tri
     const popularityButton = document.createElement('button');
     popularityButton.textContent = 'Popularité';
     popularityButton.addEventListener('click', () => {
-        media.sort(sortByPopularity);
-        updateGallery();
+      media.sort(sortByPopularity);
+      updateGallery();
     });
-
+  
     const dateButton = document.createElement('button');
     dateButton.textContent = 'Date';
     dateButton.addEventListener('click', () => {
-        media.sort(sortByDate);
-        updateGallery();
+      media.sort(sortByDate);
+      updateGallery();
     });
-
+  
     const titleButton = document.createElement('button');
     titleButton.textContent = 'Titre';
     titleButton.addEventListener('click', () => {
-        media.sort(sortByTitle);
-        updateGallery();
+      media.sort(sortByTitle);
+      updateGallery();
     });
-
+  
+    // 5. Ajouter les boutons au conteneur
     sortButtonsContainer.appendChild(popularityButton);
     sortButtonsContainer.appendChild(dateButton);
     sortButtonsContainer.appendChild(titleButton);
-
-    function updateGallery() {
-        gallery.innerHTML = ""; // Efface le contenu précédent
-    
-        media.forEach((mediaItem) => {
-          const mediaItemDiv = document.createElement("div");
-          mediaItemDiv.classList.add("media-item");
-    
-          let mediaElement;
-          if (mediaItem.image) {
-            mediaElement = document.createElement("img");
-            mediaElement.src = `./assets/Sample Photos/${mediaItem.photographerId}/${mediaItem.image}`;
-            mediaElement.alt = `Image: ${mediaItem.title}`;
-          } else if (mediaItem.video) {
-            mediaElement = document.createElement("video");
-            mediaElement.src = `./assets/Sample Photos/${mediaItem.photographerId}/${mediaItem.video}`;
-            mediaElement.controls = true;
-            mediaElement.alt = `Vidéo: ${mediaItem.title}`;
-          } else {
-            // Gestion des erreurs : affichage d'un message si le média n'a ni image ni vidéo
-            mediaElement = document.createElement("p");
-            mediaElement.textContent = "Média non disponible";
-            console.error("Erreur: le média n'a ni image ni vidéo.");
-          }
-    
-          mediaItemDiv.appendChild(mediaElement);
-    
-          // Conteneur pour le titre et les likes
-          const titleLikesContainer = document.createElement("div");
-          titleLikesContainer.classList.add("media-title-likes");
-    
-          // Titre à gauche
-          const title = document.createElement("p");
-          title.textContent = mediaItem.title;
-          title.classList.add("media-title", "media-title-left");
-          titleLikesContainer.appendChild(title);
-    
-          // Likes à droite (avec icône Font Awesome)
-          const likes = document.createElement("p");
-          likes.classList.add("media-likes", "media-likes-right");
-          const heartIcon = document.createElement("i");
-          heartIcon.classList.add("fas", "fa-heart");
-          likes.appendChild(heartIcon);
-          likes.appendChild(document.createTextNode(` ${mediaItem.likes}`));
-          titleLikesContainer.appendChild(likes);
-    
-          mediaItemDiv.appendChild(titleLikesContainer);
-          gallery.appendChild(mediaItemDiv);
-        });
-      }
-    
-      updateGallery();
+  
+    // 6. Créer la galerie
+    const gallery = document.createElement('div');
+    gallery.classList.add('gallery');
+    main.appendChild(gallery);
+  
+    // 7. Fonctions de tri
+    function sortByPopularity(mediaA, mediaB) {
+      return mediaB.likes - mediaA.likes;
     }
-
+  
+    function sortByDate(mediaA, mediaB) {
+      return new Date(mediaB.date) - new Date(mediaA.date);
+    }
+  
+    function sortByTitle(mediaA, mediaB) {
+      return mediaA.title.localeCompare(mediaB.title);
+    }
+  
+    // 8. Tri initial par popularité
+    media.sort(sortByPopularity);
+  
+    // 9. Fonction de mise à jour de la galerie
+    function updateGallery() {
+      gallery.innerHTML = "";
+  
+      media.forEach((mediaItem) => {
+        const mediaItemDiv = document.createElement("div");
+        mediaItemDiv.classList.add("media-item");
+  
+        let mediaElement;
+        if (mediaItem.image) {
+          mediaElement = document.createElement("img");
+          mediaElement.src = `./assets/Sample Photos/${mediaItem.photographerId}/${mediaItem.image}`;
+          mediaElement.alt = `Image: ${mediaItem.title}`;
+        } else if (mediaItem.video) {
+          mediaElement = document.createElement("video");
+          mediaElement.src = `./assets/Sample Photos/${mediaItem.photographerId}/${mediaItem.video}`;
+          mediaElement.controls = true;
+          mediaElement.alt = `Vidéo: ${mediaItem.title}`;
+        } else {
+          mediaElement = document.createElement("p");
+          mediaElement.textContent = "Média non disponible";
+          console.error("Erreur: le média n'a ni image ni vidéo.");
+        }
+  
+        mediaItemDiv.appendChild(mediaElement);
+  
+        // Conteneur pour le titre et les likes
+        const titleLikesContainer = document.createElement("div");
+        titleLikesContainer.classList.add("media-title-likes");
+  
+        // Titre à gauche
+        const title = document.createElement("p");
+        title.textContent = mediaItem.title;
+        title.classList.add("media-title", "media-title-left");
+        titleLikesContainer.appendChild(title);
+  
+        // Likes à droite (avec icône Font Awesome)
+        const likes = document.createElement("p");
+        likes.classList.add("media-likes", "media-likes-right");
+        const heartIcon = document.createElement("i");
+        heartIcon.classList.add("fas", "fa-heart");
+        likes.appendChild(heartIcon);
+        likes.appendChild(document.createTextNode(` ${mediaItem.likes}`));
+        titleLikesContainer.appendChild(likes);
+  
+        mediaItemDiv.appendChild(titleLikesContainer);
+        gallery.appendChild(mediaItemDiv);
+      });
+    }
+  
+    // 10. Appel initial pour afficher la galerie
+    updateGallery();
+  }
+  
 
 //récupérer et afficher les données du photographe
 async function displayPhotographer() {
