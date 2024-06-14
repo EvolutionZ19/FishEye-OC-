@@ -174,3 +174,66 @@ form input {
     flex-direction: row-reverse;
     align-items: center;
   }
+
+.sort-label {
+    color: black;
+    font-size: 18px;
+    margin-left: 100px;
+    margin-top: 20px;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 700;
+}
+.sort-container {
+    display: flex;
+    align-items: center;
+}
+
+.sort-buttons-wrapper {
+    position: relative; /* Pour positionner le menu déroulant */
+}
+
+/* Style du bouton (flèche) */
+.sort-toggle {
+    cursor: pointer;
+    margin-top: 20px;
+    margin-left: 5px;
+}
+
+/* Style de la liste des boutons */
+.sort-buttons {
+    display: none; 
+    position: absolute; /* Positionné par rapport à .sort-buttons-wrapper */
+    top: 100%; /* pour être juste en dessous du bouton */
+    left: 0;
+    background-color: #901C1C;
+    z-index: 10; 
+}
+
+.sort-buttons-wrapper:hover .sort-buttons {
+    display: block; /* Affiché au survol */
+}
+
+/* Style pour les boutons de tri */
+.sort-buttons button {
+    background-color: transparent; 
+    color: white; 
+    border: none; 
+    border-bottom: 2px solid white; 
+    padding: 8px 16px; /* Espacement interne */
+    margin: 5px 0; 
+    font-family: inherit; /* Hérite de la police du parent */
+    cursor: pointer; 
+    outline: none; /* Supprime la bordure bleue au focus */
+}
+
+/* Style pour le bouton actif */
+.sort-buttons button.active {
+    border-bottom: 2px solid #901C1C;
+}
+
+/* Style pour le bouton toggle */
+.sort-toggle { 
+    border: none; 
+    cursor: pointer; 
+    outline: none; 
+}
