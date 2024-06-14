@@ -136,111 +136,135 @@ function displayMediaGallery(media, photographerData) {
     sortLabel.textContent = 'Trier par :';
     sortLabel.classList.add('sort-label');
     sortContainer.appendChild(sortLabel);
-  
-    // 3. Créer le conteneur des boutons de tri
-    const sortButtonsContainer = document.createElement('div');
-    sortButtonsContainer.classList.add('sort-buttons');
-    sortContainer.appendChild(sortButtonsContainer);
-  
-    // 4. Créer les boutons de tri
+
+    // 3. Créer le conteneur du menu déroulant
+    const sortButtonsWrapper = document.createElement('div');
+    sortButtonsWrapper.classList.add('sort-buttons-wrapper');
+    sortContainer.appendChild(sortButtonsWrapper);
+
+    // 4. Créer le bouton pour ouvrir/fermer le menu
+    const sortToggle = document.createElement('button');
+    sortToggle.textContent = '▼';
+    sortToggle.classList.add('sort-toggle');
+    sortButtonsWrapper.appendChild(sortToggle);
+
+    // 5. Créer le conteneur des boutons de tri (à l'intérieur du menu déroulant)
+    const sortButtons = document.createElement('div');
+    sortButtons.classList.add('sort-buttons');
+    sortButtonsWrapper.appendChild(sortButtons);
+
+    // 6. Créer les boutons de tri
     const popularityButton = document.createElement('button');
     popularityButton.textContent = 'Popularité';
     popularityButton.addEventListener('click', () => {
-      media.sort(sortByPopularity);
-      updateGallery();
+        media.sort(sortByPopularity);
+        updateGallery();
     });
   
     const dateButton = document.createElement('button');
     dateButton.textContent = 'Date';
     dateButton.addEventListener('click', () => {
-      media.sort(sortByDate);
-      updateGallery();
+        media.sort(sortByDate);
+        updateGallery();
     });
   
     const titleButton = document.createElement('button');
     titleButton.textContent = 'Titre';
     titleButton.addEventListener('click', () => {
-      media.sort(sortByTitle);
-      updateGallery();
+        media.sort(sortByTitle);
+        updateGallery();
     });
-  
-    // 5. Ajouter les boutons au conteneur
-    sortButtonsContainer.appendChild(popularityButton);
-    sortButtonsContainer.appendChild(dateButton);
-    sortButtonsContainer.appendChild(titleButton);
-  
-    // 6. Créer la galerie
+
+    // 7. Ajouter les boutons au conteneur du menu déroulant
+    sortButtons.appendChild(popularityButton);
+    sortButtons.appendChild(dateButton);
+    sortButtons.appendChild(titleButton);
+
+    // 8. Créer la galerie
     const gallery = document.createElement('div');
     gallery.classList.add('gallery');
     main.appendChild(gallery);
   
     // 7. Fonctions de tri
     function sortByPopularity(mediaA, mediaB) {
-      return mediaB.likes - mediaA.likes;
+        return mediaB.likes - mediaA.likes;
     }
-  
+
     function sortByDate(mediaA, mediaB) {
-      return new Date(mediaB.date) - new Date(mediaA.date);
+        return new Date(mediaB.date) - new Date(mediaA.date);
     }
-  
+
     function sortByTitle(mediaA, mediaB) {
-      return mediaA.title.localeCompare(mediaB.title);
+        return mediaA.title.localeCompare(mediaB.title);
     }
-  
-    // 8. Tri initial par popularité
+
+    // 10. Tri initial par popularité
     media.sort(sortByPopularity);
-  
-    // 9. Fonction de mise à jour de la galerie
+
+    // 11. Fonction de mise à jour de la galerie
     function updateGallery() {
-      gallery.innerHTML = "";
-  
-      media.forEach((mediaItem) => {
-        const mediaItemDiv = document.createElement("div");
-        mediaItemDiv.classList.add("media-item");
-  
-        let mediaElement;
-        if (mediaItem.image) {
-          mediaElement = document.createElement("img");
-          mediaElement.src = `./assets/Sample Photos/${mediaItem.photographerId}/${mediaItem.image}`;
-          mediaElement.alt = `Image: ${mediaItem.title}`;
-        } else if (mediaItem.video) {
-          mediaElement = document.createElement("video");
-          mediaElement.src = `./assets/Sample Photos/${mediaItem.photographerId}/${mediaItem.video}`;
-          mediaElement.controls = true;
-          mediaElement.alt = `Vidéo: ${mediaItem.title}`;
-        } else {
-          mediaElement = document.createElement("p");
-          mediaElement.textContent = "Média non disponible";
-          console.error("Erreur: le média n'a ni image ni vidéo.");
-        }
-  
-        mediaItemDiv.appendChild(mediaElement);
-  
-        // Conteneur pour le titre et les likes
-        const titleLikesContainer = document.createElement("div");
-        titleLikesContainer.classList.add("media-title-likes");
-  
-        // Titre à gauche
-        const title = document.createElement("p");
-        title.textContent = mediaItem.title;
-        title.classList.add("media-title", "media-title-left");
-        titleLikesContainer.appendChild(title);
-  
-        // Likes à droite (avec icône Font Awesome)
-        const likes = document.createElement("p");
-        likes.classList.add("media-likes", "media-likes-right");
-        const heartIcon = document.createElement("i");
-        heartIcon.classList.add("fas", "fa-heart");
-        likes.appendChild(heartIcon);
-        likes.appendChild(document.createTextNode(` ${mediaItem.likes}`));
-        titleLikesContainer.appendChild(likes);
-  
-        mediaItemDiv.appendChild(titleLikesContainer);
-        gallery.appendChild(mediaItemDiv);
-      });
+        gallery.innerHTML = ""; // Effacer le contenu précédent de la galerie
+
+        media.forEach((mediaItem) => {
+            const mediaItemDiv = document.createElement("div");
+            mediaItemDiv.classList.add("media-item");
+
+            let mediaElement;
+            if (mediaItem.image) {
+                mediaElement = document.createElement("img");
+                mediaElement.src = `./assets/Sample Photos/${mediaItem.photographerId}/${mediaItem.image}`;
+                mediaElement.alt = `Image: ${mediaItem.title}`;
+            } else if (mediaItem.video) {
+                mediaElement = document.createElement("video");
+                mediaElement.src = `./assets/Sample Photos/${mediaItem.photographerId}/${mediaItem.video}`;
+                mediaElement.controls = true;
+                mediaElement.alt = `Vidéo: ${mediaItem.title}`;
+            } else {
+                // Gestion du cas où le média n'est ni une image ni une vidéo
+                mediaElement = document.createElement("p");
+                mediaElement.textContent = "Média non disponible";
+                console.error("Erreur: le média n'a ni image ni vidéo.");
+            }
+
+            mediaItemDiv.appendChild(mediaElement);
+
+            // Conteneur pour le titre et les likes
+            const titleLikesContainer = document.createElement("div");
+            titleLikesContainer.classList.add("media-title-likes");
+
+            // Titre à gauche
+            const title = document.createElement("p");
+            title.textContent = mediaItem.title;
+            title.classList.add("media-title", "media-title-left");
+            titleLikesContainer.appendChild(title);
+
+            // Likes à droite (avec icône Font Awesome)
+            const likes = document.createElement("p");
+            likes.classList.add("media-likes", "media-likes-right");
+            const heartIcon = document.createElement("i");
+            heartIcon.classList.add("fas", "fa-heart");
+            likes.appendChild(heartIcon);
+            likes.appendChild(document.createTextNode(` ${mediaItem.likes}`));
+            titleLikesContainer.appendChild(likes);
+
+            mediaItemDiv.appendChild(titleLikesContainer);
+            gallery.appendChild(mediaItemDiv);
+        });
     }
-  
-    // 10. Appel initial pour afficher la galerie
+
+    // 12. Gestion du menu déroulant
+    document.addEventListener('DOMContentLoaded', () => {
+        if (sortToggle && sortButtons) {
+            sortToggle.addEventListener('click', () => {
+                sortButtons.style.display = sortButtons.style.display === 'block' ? 'none' : 'block';
+                sortToggle.textContent = sortToggle.textContent === '▼' ? '▲' : '▼';
+            });
+        } else {
+            console.error("Éléments du menu déroulant non trouvés.");
+        }
+    });
+
+    // 13. Appel initial pour afficher la galerie
     updateGallery();
   }
   
