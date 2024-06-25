@@ -302,3 +302,42 @@ form input {
     cursor: pointer;
     z-index: 101; /* Au-dessus du contenu du slider */
 }
+
+/* Styles pour le rectangle */
+.total-likes-price-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #DB8876; 
+    color: black;
+    padding: 15px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    font-family: 'DM Sans', sans-serif; 
+    z-index: 1000; 
+}
+
+/* Style pour le total de likes */
+#total-likes {
+    font-size: 18px;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+
+/* Style pour le séparateur */
+.separator {
+    display: inline-block;
+    width: 2px;
+    height: 20px;
+    background-color: black;
+    margin: 0 10px;
+    opacity: 0;
+}
+
+/* Style pour le prix par jour */
+#price-per-day {
+    font-size: 18px;
+    font-weight: bold;
+}

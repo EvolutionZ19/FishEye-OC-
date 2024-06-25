@@ -395,4 +395,35 @@ function updateGallery() {
     
     // Appeler la fonction d'affichage lorsque la page se charge
     displayPhotographer();
+
+    async function displayTotalLikesAndPrice() {
+        const mediaData = await getPhotographerMedia(photographerId);
+        const photographerData = await getPhotographer();
+    
+        if (mediaData && photographerData) {
+            const totalLikes = mediaData.reduce((sum, media) => sum + media.likes, 0);
+            const pricePerDay = photographerData.price;
+    
+            // Créer le conteneur si nécessaire
+            let totalLikesPriceContainer = document.getElementById('total-likes-price');
+            if (!totalLikesPriceContainer) {
+                totalLikesPriceContainer = document.createElement('div');
+                totalLikesPriceContainer.id = 'total-likes-price';
+                totalLikesPriceContainer.classList.add('total-likes-price-container');
+                document.body.appendChild(totalLikesPriceContainer);
+            }
+    
+            // Mettre à jour le contenu (ordre modifié)
+            totalLikesPriceContainer.innerHTML = `
+                <div id="total-likes">${totalLikes}</div>
+                <i class="fas fa-heart"></i>
+                <span class="separator"></span>
+                <div id="price-per-day">${pricePerDay}€/jour</div>
+            `;
+        }
+    }
+
+    // Appeler la fonction displayTotalLikesAndPrice après avoir chargé les données du photographe
+displayPhotographer().then(displayTotalLikesAndPrice); 
+
     
