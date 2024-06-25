@@ -423,7 +423,7 @@ function updateGallery() {
         }
     }
 
-    // Appeler la fonction displayTotalLikesAndPrice après avoir chargé les données du photographe
-displayPhotographer().then(displayTotalLikesAndPrice); 
+    // Appeler la fonction displayTotalLikesAndPrice
+    displayTotalLikesAndPrice();
 
     
