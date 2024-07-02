@@ -341,3 +341,11 @@ form input {
     font-size: 18px;
     font-weight: bold;
 }
+
+.media-likes button {
+    background: none; /* Supprimer le fond */
+    border: none;    /* Supprimer la bordure */
+    padding: 0;      /* Supprimer le padding (espacement interne) */
+    cursor: pointer; /* Garder le curseur en forme de main pour indiquer que c'est cliquable */
+    color: #901C1C;
+}
