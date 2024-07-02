@@ -1,6 +1,6 @@
-
 // Définir photographerId en dehors de toute fonction pour la rendre globale
 let photographerId;
+let mediaData = []; // Stocker les données des médias globalement
 
 // Récupérer les données du photographe
 async function getPhotographer() {
@@ -81,7 +81,7 @@ async function photographerTemplate() {
         contactButton.onclick = displayModal; // Add event listener
         photographHeader.appendChild(contactButton);
         photographHeader.appendChild(img); 
-        
+
         const mediaData = await getPhotographerMedia(photographerId);
         if (mediaData) {
             displayMediaGallery(mediaData, photographerData); 
@@ -128,6 +128,7 @@ function closeModal() {
 }
 
 function displayMediaGallery(media, photographerData) {
+    mediaData = media; // Garder une référence aux données des médias
     const main = document.getElementById('main');
     let currentMediaIndex = 0;
     let slider;
@@ -220,61 +221,77 @@ function displayMediaGallery(media, photographerData) {
     popularityButton.classList.add('active'); // Marquer le bouton "Popularité" comme actif initialement
 
     // 11. Fonction de mise à jour de la galerie
-function updateGallery() {
-    gallery.innerHTML = ""; // Effacer le contenu précédent de la galerie
-  
-    media.forEach((mediaItem, index) => {
-      const mediaItemDiv = document.createElement("div");
-      mediaItemDiv.classList.add("media-item");
-      mediaItemDiv.setAttribute('data-media-index', index); // Ajouter index au parent
-  
-      let mediaElement;
-      if (mediaItem.image) {
-        mediaElement = document.createElement("img");
-        mediaElement.src = `./assets/Sample Photos/${mediaItem.photographerId}/${mediaItem.image}`;
-        mediaElement.alt = mediaItem.title;
-      } else if (mediaItem.video) {
-        mediaElement = document.createElement("video");
-        mediaElement.src = `./assets/Sample Photos/${mediaItem.photographerId}/${mediaItem.video}`;
-        mediaElement.controls = true;
-        mediaElement.alt = mediaItem.title;
-      } else {
-        // Gestion du cas où le média n'est ni une image ni une vidéo
-        mediaElement = document.createElement("p");
-        mediaElement.textContent = "Média non disponible";
-        console.error("Erreur: le média n'a ni image ni vidéo.");
-      }
-  
-      // Ajouter un écouteur d'événements pour ouvrir le slider
-      mediaItemDiv.addEventListener('click', () => {
-        openSlider(index);
-      });
-  
-      mediaItemDiv.appendChild(mediaElement);
-  
-      // Conteneur pour le titre et les likes
-      const titleLikesContainer = document.createElement("div");
-      titleLikesContainer.classList.add("media-title-likes");
-  
-      // Titre à gauche
-      const title = document.createElement("p");
-      title.textContent = mediaItem.title;
-      title.classList.add("media-title", "media-title-left");
-      titleLikesContainer.appendChild(title);
-  
-      // Likes à droite (avec icône Font Awesome)
-      const likes = document.createElement("p");
-      likes.classList.add("media-likes", "media-likes-right");
-      const heartIcon = document.createElement("i");
-      heartIcon.classList.add("fas", "fa-heart");
-      likes.appendChild(heartIcon);
-      likes.appendChild(document.createTextNode(` ${mediaItem.likes}`));
-      titleLikesContainer.appendChild(likes);
-  
-      mediaItemDiv.appendChild(titleLikesContainer);
-      gallery.appendChild(mediaItemDiv);
-    });
-}  
+    function updateGallery() {
+        gallery.innerHTML = ""; 
+
+        media.forEach((mediaItem, index) => {
+            const mediaItemDiv = document.createElement("div");
+            mediaItemDiv.classList.add("media-item");
+            mediaItemDiv.setAttribute('data-media-index', index);
+
+            // Création de l'élément multimédia (image ou vidéo)
+            let mediaElement;
+            if (mediaItem.image) {
+                mediaElement = document.createElement("img");
+                mediaElement.src = `./assets/Sample Photos/${mediaItem.photographerId}/${mediaItem.image}`;
+                mediaElement.alt = mediaItem.title;
+            } else if (mediaItem.video) {
+                mediaElement = document.createElement("video");
+                mediaElement.src = `./assets/Sample Photos/${mediaItem.photographerId}/${mediaItem.video}`;
+                mediaElement.controls = true;
+                mediaElement.alt = mediaItem.title;
+            } else {
+                console.error("Erreur: le média n'a ni image ni vidéo.");
+                mediaElement = document.createElement("div"); // Créer un élément vide pour éviter les erreurs d'affichage
+            }
+
+            // Ajouter un écouteur d'événements pour ouvrir le slider
+            mediaElement.addEventListener('click', () => {
+                openSlider(index);
+            });
+            
+            mediaItemDiv.appendChild(mediaElement);
+
+            // Conteneur pour le titre et les likes
+            const titleLikesContainer = document.createElement("div");
+            titleLikesContainer.classList.add("media-title-likes");
+
+            // Titre à gauche
+            const title = document.createElement("p");
+            title.textContent = mediaItem.title;
+            title.classList.add("media-title", "media-title-left");
+            titleLikesContainer.appendChild(title);
+
+            // Likes à droite (avec icône Font Awesome cliquable)
+            const likesContainer = document.createElement("div");
+            likesContainer.classList.add("media-likes", "media-likes-right");
+
+            const heartButton = document.createElement("button");
+            const heartIcon = document.createElement("i");
+            heartIcon.classList.add("fas", "fa-heart");
+            heartButton.appendChild(heartIcon);
+            likesContainer.appendChild(heartButton);
+
+            const likesCount = document.createElement("span");
+            likesCount.textContent = mediaItem.likes;
+            likesContainer.appendChild(likesCount);
+
+            titleLikesContainer.appendChild(likesContainer);
+
+            // Écouteur d'événements sur le bouton "coeur" (limité à un like par média)
+            heartButton.addEventListener('click', function() {
+                if (!mediaItem.liked) { 
+                    mediaItem.likes++;
+                    likesCount.textContent = mediaItem.likes;
+                    updateTotalLikesAndPrice(); // Fonction spécifique pour la mise à jour
+                    mediaItem.liked = true; 
+                }
+            });
+
+            mediaItemDiv.appendChild(titleLikesContainer);
+            gallery.appendChild(mediaItemDiv);
+        });
+    }
 
     // Fonction pour mettre à jour l'état actif du bouton de tri
     function updateSortButtonActiveState(activeButton) {
@@ -349,81 +366,79 @@ function updateGallery() {
         }
 
         sliderContent.appendChild(sliderMedia);
-}
-    
-        // Fonction pour fermer le slider
-        function closeSlider() {
-            const slider = document.querySelector('.slider');
-            if (slider) {
-                slider.remove();
-            }
-        }
-    
-        // 12. Gestion du menu déroulant
-        document.addEventListener('DOMContentLoaded', () => {
-            if (sortToggle && sortButtons) {
-                sortToggle.addEventListener('click', () => {
-                    sortButtons.style.display = sortButtons.style.display === 'block' ? 'none' : 'block';
-                    sortToggle.textContent = sortToggle.textContent === '▼' ? '▲' : '▼';
-                });
-            } else {
-                console.error("Éléments du menu déroulant non trouvés.");
-            }
-        });
-    
-        // 13. Appel initial pour afficher la galerie
-        updateGallery();
     }
     
-    //récupérer et afficher les données du photographe
-    async function displayPhotographer() {
-        // Obtenir l'ID à partir des paramètres de l'URL
-        const urlParams = new URLSearchParams(window.location.search);
-        photographerId = urlParams.get("id");
-    
-        if (photographerId) {
-            const photographerData = await getPhotographer();
-            if (photographerData) {
-                photographerTemplate(photographerData); // Appeler la fonction pour modifier la div
-            } else {
-                console.error("Aucun photographe trouvé avec cet ID.");
-            }
+    // Fonction pour fermer le slider
+    function closeSlider() {
+        const slider = document.querySelector('.slider');
+        if (slider) {
+            slider.remove();
+        }
+    }
+
+    // 12. Gestion du menu déroulant
+    document.addEventListener('DOMContentLoaded', () => {
+        if (sortToggle && sortButtons) {
+            sortToggle.addEventListener('click', () => {
+                sortButtons.style.display = sortButtons.style.display === 'block' ? 'none' : 'block';
+                sortToggle.textContent = sortToggle.textContent === '▼' ? '▲' : '▼';
+            });
         } else {
-            console.error("Aucun ID de photographe fourni dans l'URL.");
+            console.error("Éléments du menu déroulant non trouvés.");
         }
-    }
-    
-    // Appeler la fonction d'affichage lorsque la page se charge
-    displayPhotographer();
+    });
 
-    async function displayTotalLikesAndPrice() {
-        const mediaData = await getPhotographerMedia(photographerId);
+    // Fonction dédiée à la mise à jour des totaux
+    async function updateTotalLikesAndPrice() {
+        const totalLikes = mediaData.reduce((sum, media) => sum + media.likes, 0);
+        const pricePerDay = (await getPhotographer()).price;
+
+        // Créer le conteneur si nécessaire
+        let totalLikesPriceContainer = document.getElementById('total-likes-price');
+        if (!totalLikesPriceContainer) {
+            totalLikesPriceContainer = document.createElement('div');
+            totalLikesPriceContainer.id = 'total-likes-price';
+            totalLikesPriceContainer.classList.add('total-likes-price-container');
+            document.body.appendChild(totalLikesPriceContainer);
+        }
+
+        // Mettre à jour le contenu (ordre modifié)
+        totalLikesPriceContainer.innerHTML = `
+            <div id="total-likes">${totalLikes}</div>
+            <i class="fas fa-heart"></i>
+            <span class="separator"></span>
+            <div id="price-per-day">${pricePerDay}€/jour</div>
+        `;
+    }
+
+    // 13. Appel initial pour afficher la galerie
+    updateGallery();
+
+    // Appeler updateTotalLikesAndPrice pour l'affichage initial
+    updateTotalLikesAndPrice();
+}
+
+//récupérer et afficher les données du photographe
+async function displayPhotographer() {
+    // Obtenir l'ID à partir des paramètres de l'URL
+    const urlParams = new URLSearchParams(window.location.search);
+    photographerId = urlParams.get("id");
+
+    if (photographerId) {
         const photographerData = await getPhotographer();
-    
-        if (mediaData && photographerData) {
-            const totalLikes = mediaData.reduce((sum, media) => sum + media.likes, 0);
-            const pricePerDay = photographerData.price;
-    
-            // Créer le conteneur si nécessaire
-            let totalLikesPriceContainer = document.getElementById('total-likes-price');
-            if (!totalLikesPriceContainer) {
-                totalLikesPriceContainer = document.createElement('div');
-                totalLikesPriceContainer.id = 'total-likes-price';
-                totalLikesPriceContainer.classList.add('total-likes-price-container');
-                document.body.appendChild(totalLikesPriceContainer);
-            }
-    
-            // Mettre à jour le contenu (ordre modifié)
-            totalLikesPriceContainer.innerHTML = `
-                <div id="total-likes">${totalLikes}</div>
-                <i class="fas fa-heart"></i>
-                <span class="separator"></span>
-                <div id="price-per-day">${pricePerDay}€/jour</div>
-            `;
+        if (photographerData) {
+            photographerTemplate(photographerData); // Appeler la fonction pour modifier la div
+        } else {
+            console.error("Aucun photographe trouvé avec cet ID.");
         }
+    } else {
+        console.error("Aucun ID de photographe fourni dans l'URL.");
     }
+}
 
-    // Appeler la fonction displayTotalLikesAndPrice
-    displayTotalLikesAndPrice();
+// Appeler la fonction d'affichage lorsque la page se charge
+displayPhotographer();
 
-    
+// Appeler la fonction updateTotalLikesAndPrice pour l'affichage initial
+updateTotalLikesAndPrice(); 
+
