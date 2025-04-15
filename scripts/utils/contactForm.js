@@ -2,7 +2,7 @@ function displayModal() {
     const modal = document.getElementById("contact_modal");
     modal.style.display = "block";
     modal.setAttribute("aria-hidden", "false");
-    
+
     // Empêche le scroll de fond
     document.body.classList.add("no-scroll");
 
@@ -15,9 +15,13 @@ function closeModal() {
     const modal = document.getElementById("contact_modal");
     modal.style.display = "none";
     modal.setAttribute("aria-hidden", "true");
-     
+
     // Restaure le scroll de fond
-     document.body.classList.remove("no-scroll");
+    document.body.classList.remove("no-scroll");
+
+    // Rendre le focus au bouton "Contactez-moi"
+    const mainButton = document.querySelector('.photograph-header .contact_button');
+    if (mainButton) mainButton.focus();
 }
 
 // Validation du formulaire : affichage des données en console
@@ -42,5 +46,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
             form.reset(); // Réinitialiser le formulaire
         });
+    }
+});
+  
+// GESTION DU FOCUS TRAP DANS LA MODALE
+document.addEventListener("keydown", function (e) {
+    const modal = document.getElementById("contact_modal");
+
+    if (modal.style.display === "block") {
+        const focusableSelectors = 'input, textarea, button, [tabindex]:not([tabindex="-1"])';
+        const focusables = modal.querySelectorAll(focusableSelectors);
+        const firstEl = focusables[0];
+        const lastEl = focusables[focusables.length - 1];
+
+        // Touche TAB
+        if (e.key === "Tab") {
+            if (e.shiftKey) {
+                // Shift + Tab
+                if (document.activeElement === firstEl) {
+                    e.preventDefault();
+                    lastEl.focus();
+                }
+            } else {
+                // Tab normal
+                if (document.activeElement === lastEl) {
+                    e.preventDefault();
+                    firstEl.focus();
+                }
+            }
+        }
+
+        // Touche ÉCHAP pour fermer
+        if (e.key === "Escape") {
+            closeModal();
+        }
     }
 });
