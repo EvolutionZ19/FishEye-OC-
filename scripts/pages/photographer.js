@@ -93,14 +93,8 @@ async function photographerTemplate() {
 function displayModal() {
     const modal = document.getElementById("contact_modal");
     modal.style.display = "block";
-
-    const modalButton = modal.querySelector(".contact_button");
-    if (modalButton) modalButton.remove();
-
-    const mainButton = document.querySelector('.photograph-header .contact_button');
-    const clonedButton = mainButton.cloneNode(true);
-    const modalForm = modal.querySelector('form');
-    modalForm.appendChild(clonedButton);
+    const firstInput = modal.querySelector("#first");
+    if (firstInput) firstInput.focus();
 }
 
 // Fonction pour fermer la modale de contact
@@ -122,6 +116,7 @@ function displayMediaGallery(media, photographerData) {
     let nextButton;
     let closeButton;
 
+    // ----- TRI -----
     const sortContainer = document.createElement('div');
     sortContainer.classList.add('sort-container');
     main.appendChild(sortContainer);
@@ -136,12 +131,13 @@ function displayMediaGallery(media, photographerData) {
     sortContainer.appendChild(sortButtonsWrapper);
 
     const sortToggle = document.createElement('button');
-    sortToggle.textContent = 'Popularité';
+    sortToggle.textContent = 'Popularité ▼';
     sortToggle.classList.add('sort-toggle');
     sortButtonsWrapper.appendChild(sortToggle);
 
     const sortButtons = document.createElement('div');
     sortButtons.classList.add('sort-buttons');
+    sortButtons.style.display = 'none';
     sortButtonsWrapper.appendChild(sortButtons);
 
     const popularityButton = document.createElement('button');
@@ -152,6 +148,7 @@ function displayMediaGallery(media, photographerData) {
         updateGallery();
         updateSortButtonActiveState(popularityButton);
         sortToggle.textContent = 'Popularité ▼';
+        sortButtons.style.display = 'none';
     });
 
     const dateButton = document.createElement('button');
@@ -162,6 +159,7 @@ function displayMediaGallery(media, photographerData) {
         updateGallery();
         updateSortButtonActiveState(dateButton);
         sortToggle.textContent = 'Date ▼';
+        sortButtons.style.display = 'none';
     });
 
     const titleButton = document.createElement('button');
@@ -172,16 +170,23 @@ function displayMediaGallery(media, photographerData) {
         updateGallery();
         updateSortButtonActiveState(titleButton);
         sortToggle.textContent = 'Titre ▼';
+        sortButtons.style.display = 'none';
     });
 
     sortButtons.appendChild(popularityButton);
     sortButtons.appendChild(dateButton);
     sortButtons.appendChild(titleButton);
 
-    sortToggle.textContent = 'Popularité ▼';
+    // 📌 Toggle ouverture/fermeture
+    sortToggle.addEventListener("click", () => {
+        sortButtons.style.display = sortButtons.style.display === "block" ? "none" : "block";
+    });
+
+    // Tri initial
     media.sort(sortByPopularity);
     popularityButton.classList.add('active');
 
+    // ----- GALERIE -----
     const gallery = document.createElement('div');
     gallery.classList.add('gallery');
     main.appendChild(gallery);
@@ -268,6 +273,7 @@ function displayMediaGallery(media, photographerData) {
         activeButton.classList.add('active');
     }
 
+    // ----- SLIDER -----
     function openSlider(index) {
         currentMediaIndex = index;
         if (!slider) {
@@ -335,7 +341,6 @@ function displayMediaGallery(media, photographerData) {
         if (slider) slider.remove();
     }
 
-    // Accessibilité clavier dans le slider
     document.addEventListener("keydown", function (e) {
         const slider = document.querySelector(".slider.open");
         if (!slider) return;

@@ -1,5 +1,5 @@
 #contact_modal {
-    display: none;
+    display: none; 
     position: fixed; /* superposition */
     top: 0;
     left: 0;
@@ -10,6 +10,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  /*afficher la modale en flex */
+#contact_modal[aria-hidden="false"] {
+    display: flex;
   }
   
 
@@ -231,10 +235,7 @@ form input {
     z-index: 10; 
     display:flex;
     flex-direction: column;
-}
-
-.sort-buttons-wrapper:hover .sort-buttons {
-    display: block; /* Affiché au survol */
+    display: none; /* Masqué par défaut */
 }
 
 /* Style pour les boutons de tri */

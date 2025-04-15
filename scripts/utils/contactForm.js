@@ -1,6 +1,6 @@
 function displayModal() {
     const modal = document.getElementById("contact_modal");
-    modal.style.display = "block";
+    modal.style.display = "flex"; 
     modal.setAttribute("aria-hidden", "false");
 
     // Empêche le scroll de fond
