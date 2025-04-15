@@ -452,6 +452,4 @@ async function displayPhotographer() {
 // Appeler la fonction d'affichage lorsque la page se charge
 displayPhotographer();
 
-// Appeler la fonction updateTotalLikesAndPrice pour l'affichage initial
-updateTotalLikesAndPrice(); 
 
