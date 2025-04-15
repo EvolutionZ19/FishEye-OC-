@@ -82,3 +82,11 @@ document.addEventListener("keydown", function (e) {
         }
     }
 });
+
+// Forcer la fermeture de la modale au chargement de la page
+window.addEventListener("DOMContentLoaded", () => {
+    const modal = document.getElementById("contact_modal");
+    modal.style.display = "none";
+    modal.setAttribute("aria-hidden", "true");
+  });
+  
