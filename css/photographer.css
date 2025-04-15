@@ -257,6 +257,8 @@ form input {
 /* Style pour le bouton actif */
 .sort-buttons button.active {
     border-bottom: 2px solid #901C1C;
+    pointer-events: none;
+    opacity: 0.5;
 }
 
 /* Style pour le bouton toggle */
