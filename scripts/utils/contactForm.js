@@ -2,6 +2,9 @@ function displayModal() {
     const modal = document.getElementById("contact_modal");
     modal.style.display = "block";
     modal.setAttribute("aria-hidden", "false");
+    
+    // Empêche le scroll de fond
+    document.body.classList.add("no-scroll");
 
     // Mettre le focus sur le champ Prénom à l’ouverture
     const firstInput = modal.querySelector("#first");
@@ -12,6 +15,9 @@ function closeModal() {
     const modal = document.getElementById("contact_modal");
     modal.style.display = "none";
     modal.setAttribute("aria-hidden", "true");
+     
+    // Restaure le scroll de fond
+     document.body.classList.remove("no-scroll");
 }
 
 // Validation du formulaire : affichage des données en console

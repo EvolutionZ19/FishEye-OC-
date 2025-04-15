@@ -42,6 +42,8 @@
     justify-content: space-between;
     padding: 35px;
     margin: auto;
+    max-height: 90vh; /* limite en hauteur à 90% de la fenêtre */
+    overflow-y: auto; /* scroll interne si besoin */    
 }
 
 .modal header {
@@ -379,4 +381,8 @@ form textarea {
     padding: 10px;
     font-size: 18px;
   }
+  
+.no-scroll {
+    overflow: hidden;
+ }
   
