@@ -229,6 +229,8 @@ form input {
     left: 0;
     background-color: #901C1C;
     z-index: 10; 
+    display:flex;
+    flex-direction: column;
 }
 
 .sort-buttons-wrapper:hover .sort-buttons {
@@ -246,7 +248,11 @@ form input {
     font-family: inherit; /* Hérite de la police du parent */
     cursor: pointer; 
     outline: none; /* Supprime la bordure bleue au focus */
+    width: 100%;
 }
+.sort-buttons button:first-child {
+    border-top: none; /* pas de ligne sur le premier */
+  }
 
 /* Style pour le bouton actif */
 .sort-buttons button.active {
