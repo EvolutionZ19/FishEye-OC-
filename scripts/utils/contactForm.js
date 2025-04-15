@@ -1,11 +1,17 @@
 function displayModal() {
     const modal = document.getElementById("contact_modal");
     modal.style.display = "block";
+    modal.setAttribute("aria-hidden", "false");
+
+    // Mettre le focus sur le champ Prénom à l’ouverture
+    const firstInput = modal.querySelector("#first");
+    if (firstInput) firstInput.focus();
 }
 
 function closeModal() {
     const modal = document.getElementById("contact_modal");
     modal.style.display = "none";
+    modal.setAttribute("aria-hidden", "true");
 }
 
 // Validation du formulaire : affichage des données en console
