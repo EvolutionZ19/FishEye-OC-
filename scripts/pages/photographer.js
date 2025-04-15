@@ -156,16 +156,18 @@ function displayMediaGallery(media, photographerData) {
 
     // 4. Créer le bouton pour ouvrir/fermer le menu
     const sortToggle = document.createElement('button');
-    sortToggle.textContent = '▼';
+    sortToggle.textContent = 'Popularité'; // Afficher le tri par défaut
     sortToggle.classList.add('sort-toggle');
     sortButtonsWrapper.appendChild(sortToggle);
+
 
     // 5. Créer le conteneur des boutons de tri (à l'intérieur du menu déroulant)
     const sortButtons = document.createElement('div');
     sortButtons.classList.add('sort-buttons');
+    // sortButtons.style.display = 'none'; // Supprimer cette ligne
     sortButtonsWrapper.appendChild(sortButtons);
 
-    // 6. Créer les boutons de tri
+    // 6. Créer les boutons de tri (modifié)
     const popularityButton = document.createElement('button');
     popularityButton.textContent = 'Popularité';
     popularityButton.classList.add('sort-button');
@@ -173,6 +175,7 @@ function displayMediaGallery(media, photographerData) {
         media.sort(sortByPopularity);
         updateGallery();
         updateSortButtonActiveState(popularityButton);
+        sortToggle.textContent = 'Popularité ▼'; // Mettre à jour le bouton principal
     });
 
     const dateButton = document.createElement('button');
@@ -182,6 +185,7 @@ function displayMediaGallery(media, photographerData) {
         media.sort(sortByDate);
         updateGallery();
         updateSortButtonActiveState(dateButton);
+        sortToggle.textContent = 'Date ▼'; // Mettre à jour le bouton principal
     });
 
     const titleButton = document.createElement('button');
@@ -191,7 +195,16 @@ function displayMediaGallery(media, photographerData) {
         media.sort(sortByTitle);
         updateGallery();
         updateSortButtonActiveState(titleButton);
+        sortToggle.textContent = 'Titre ▼'; // Mettre à jour le bouton principal
     });
+
+    // 7. Ajouter les boutons au conteneur du menu déroulant
+    sortButtons.appendChild(popularityButton);
+    sortButtons.appendChild(dateButton);
+    sortButtons.appendChild(titleButton);
+
+    // Initialiser le bouton principal avec le tri par popularité et la flèche
+    sortToggle.textContent = 'Popularité ▼';
 
     // 7. Ajouter les boutons au conteneur du menu déroulant
     sortButtons.appendChild(popularityButton);

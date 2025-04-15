@@ -192,11 +192,20 @@ form input {
     position: relative; /* Pour positionner le menu déroulant */
 }
 
-/* Style du bouton (flèche) */
+/* Style popularité */
 .sort-toggle {
+
+    /* Styles pour ressembler aux autres boutons de tri */
+    background-color: #901C1C;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    margin: 5px 0;
+    font-family: inherit;
     cursor: pointer;
+    outline: none;
+    margin-left: 15px;
     margin-top: 20px;
-    margin-left: 5px;
 }
 
 /* Style de la liste des boutons */
@@ -349,3 +358,14 @@ form input {
     cursor: pointer; /* Garder le curseur en forme de main pour indiquer que c'est cliquable */
     color: #901C1C;
 }
+
+form textarea {
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    resize: vertical;
+    min-height: 100px;
+    padding: 10px;
+    font-size: 18px;
+  }
+  
