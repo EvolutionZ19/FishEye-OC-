@@ -28,13 +28,12 @@ async function getPhotographerMedia(photographerId) {
 async function photographerTemplate() {
     const photographerData = await getPhotographer();
 
-    if (photographerData) { 
+    if (photographerData) {
         const { name, portrait, city, country, tagline, tags } = photographerData;
 
         const photographHeader = document.querySelector('.photograph-header');
         photographHeader.innerHTML = ''; // supprimer le contenu précédent
 
-        // Création des éléments du profil
         const img = document.createElement("img");
         img.src = `./assets/Sample Photos/Photographers ID Photos/${portrait}`;
         img.alt = name;
@@ -62,29 +61,26 @@ async function photographerTemplate() {
             });
         }
 
-        // Créer la div pour les informations du photographe
         const photographerInfo = document.createElement("div");
         photographerInfo.classList.add("photographer-info");
 
-        // Ajouter les éléments à la div photographer-info
         photographerInfo.appendChild(h2);
         photographerInfo.appendChild(location);
         photographerInfo.appendChild(taglineElement);
-        photographerInfo.appendChild(tagsElement); 
+        photographerInfo.appendChild(tagsElement);
 
         photographHeader.appendChild(photographerInfo);
-        
-        // Create and append the contact button
+
         const contactButton = document.createElement("button");
         contactButton.classList.add("contact_button");
         contactButton.textContent = "Contactez-moi";
-        contactButton.onclick = displayModal; // Add event listener
+        contactButton.onclick = displayModal;
         photographHeader.appendChild(contactButton);
-        photographHeader.appendChild(img); 
+        photographHeader.appendChild(img);
 
         const mediaData = await getPhotographerMedia(photographerId);
         if (mediaData) {
-            displayMediaGallery(mediaData, photographerData); 
+            displayMediaGallery(mediaData, photographerData);
         } else {
             console.error("Aucun média trouvé pour ce photographe.");
         }
@@ -98,19 +94,11 @@ function displayModal() {
     const modal = document.getElementById("contact_modal");
     modal.style.display = "block";
 
-    // Supprimer le bouton "Envoyer" de la modale
     const modalButton = modal.querySelector(".contact_button");
-    if (modalButton) {
-        modalButton.remove(); 
-    }
+    if (modalButton) modalButton.remove();
 
-    // Récupérer le bouton principal "Contactez-moi"
     const mainButton = document.querySelector('.photograph-header .contact_button');
-
-    // Cloner le bouton principal
     const clonedButton = mainButton.cloneNode(true);
-
-    // Ajouter le bouton cloné à la modale
     const modalForm = modal.querySelector('form');
     modalForm.appendChild(clonedButton);
 }
@@ -120,15 +108,12 @@ function closeModal() {
     const modal = document.getElementById("contact_modal");
     modal.style.display = "none";
 
-    // Supprimer le bouton cloné de la modale
     const modalButton = modal.querySelector(".contact_button");
-    if (modalButton) {
-        modalButton.remove();
-    }
+    if (modalButton) modalButton.remove();
 }
 
 function displayMediaGallery(media, photographerData) {
-    mediaData = media; // Garder une référence aux données des médias
+    mediaData = media;
     const main = document.getElementById('main');
     let currentMediaIndex = 0;
     let slider;
@@ -136,38 +121,29 @@ function displayMediaGallery(media, photographerData) {
     let prevButton;
     let nextButton;
     let closeButton;
-    let sliderMedia;
 
-    // 1. Créer le conteneur principal pour le tri
     const sortContainer = document.createElement('div');
     sortContainer.classList.add('sort-container');
     main.appendChild(sortContainer);
 
-    // 2. Ajouter le texte "Trier par :"
     const sortLabel = document.createElement('span');
     sortLabel.textContent = 'Trier par :';
     sortLabel.classList.add('sort-label');
     sortContainer.appendChild(sortLabel);
 
-    // 3. Créer le conteneur du menu déroulant
     const sortButtonsWrapper = document.createElement('div');
     sortButtonsWrapper.classList.add('sort-buttons-wrapper');
     sortContainer.appendChild(sortButtonsWrapper);
 
-    // 4. Créer le bouton pour ouvrir/fermer le menu
     const sortToggle = document.createElement('button');
-    sortToggle.textContent = 'Popularité'; // Afficher le tri par défaut
+    sortToggle.textContent = 'Popularité';
     sortToggle.classList.add('sort-toggle');
     sortButtonsWrapper.appendChild(sortToggle);
 
-
-    // 5. Créer le conteneur des boutons de tri (à l'intérieur du menu déroulant)
     const sortButtons = document.createElement('div');
     sortButtons.classList.add('sort-buttons');
-    // sortButtons.style.display = 'none'; // Supprimer cette ligne
     sortButtonsWrapper.appendChild(sortButtons);
 
-    // 6. Créer les boutons de tri (modifié)
     const popularityButton = document.createElement('button');
     popularityButton.textContent = 'Popularité';
     popularityButton.classList.add('sort-button');
@@ -175,7 +151,7 @@ function displayMediaGallery(media, photographerData) {
         media.sort(sortByPopularity);
         updateGallery();
         updateSortButtonActiveState(popularityButton);
-        sortToggle.textContent = 'Popularité ▼'; // Mettre à jour le bouton principal
+        sortToggle.textContent = 'Popularité ▼';
     });
 
     const dateButton = document.createElement('button');
@@ -185,7 +161,7 @@ function displayMediaGallery(media, photographerData) {
         media.sort(sortByDate);
         updateGallery();
         updateSortButtonActiveState(dateButton);
-        sortToggle.textContent = 'Date ▼'; // Mettre à jour le bouton principal
+        sortToggle.textContent = 'Date ▼';
     });
 
     const titleButton = document.createElement('button');
@@ -195,54 +171,41 @@ function displayMediaGallery(media, photographerData) {
         media.sort(sortByTitle);
         updateGallery();
         updateSortButtonActiveState(titleButton);
-        sortToggle.textContent = 'Titre ▼'; // Mettre à jour le bouton principal
+        sortToggle.textContent = 'Titre ▼';
     });
 
-    // 7. Ajouter les boutons au conteneur du menu déroulant
     sortButtons.appendChild(popularityButton);
     sortButtons.appendChild(dateButton);
     sortButtons.appendChild(titleButton);
 
-    // Initialiser le bouton principal avec le tri par popularité et la flèche
     sortToggle.textContent = 'Popularité ▼';
+    media.sort(sortByPopularity);
+    popularityButton.classList.add('active');
 
-    // 7. Ajouter les boutons au conteneur du menu déroulant
-    sortButtons.appendChild(popularityButton);
-    sortButtons.appendChild(dateButton);
-    sortButtons.appendChild(titleButton);
-
-    // 8. Créer la galerie
     const gallery = document.createElement('div');
     gallery.classList.add('gallery');
     main.appendChild(gallery);
 
-    // 9. Fonctions de tri
-    function sortByPopularity(mediaA, mediaB) {
-        return mediaB.likes - mediaA.likes;
+    function sortByPopularity(a, b) {
+        return b.likes - a.likes;
     }
 
-    function sortByDate(mediaA, mediaB) {
-        return new Date(mediaB.date) - new Date(mediaA.date);
+    function sortByDate(a, b) {
+        return new Date(b.date) - new Date(a.date);
     }
 
-    function sortByTitle(mediaA, mediaB) {
-        return mediaA.title.localeCompare(mediaB.title);
+    function sortByTitle(a, b) {
+        return a.title.localeCompare(b.title);
     }
 
-    // 10. Tri initial par popularité
-    media.sort(sortByPopularity);
-    popularityButton.classList.add('active'); // Marquer le bouton "Popularité" comme actif initialement
-
-    // 11. Fonction de mise à jour de la galerie
     function updateGallery() {
-        gallery.innerHTML = ""; 
+        gallery.innerHTML = "";
 
         media.forEach((mediaItem, index) => {
             const mediaItemDiv = document.createElement("div");
             mediaItemDiv.classList.add("media-item");
             mediaItemDiv.setAttribute('data-media-index', index);
 
-            // Création de l'élément multimédia (image ou vidéo)
             let mediaElement;
             if (mediaItem.image) {
                 mediaElement = document.createElement("img");
@@ -254,28 +217,22 @@ function displayMediaGallery(media, photographerData) {
                 mediaElement.controls = true;
                 mediaElement.alt = mediaItem.title;
             } else {
-                console.error("Erreur: le média n'a ni image ni vidéo.");
-                mediaElement = document.createElement("div"); // Créer un élément vide pour éviter les erreurs d'affichage
+                mediaElement = document.createElement("div");
             }
 
-            // Ajouter un écouteur d'événements pour ouvrir le slider
             mediaElement.addEventListener('click', () => {
                 openSlider(index);
             });
-            
+
             mediaItemDiv.appendChild(mediaElement);
 
-            // Conteneur pour le titre et les likes
             const titleLikesContainer = document.createElement("div");
             titleLikesContainer.classList.add("media-title-likes");
 
-            // Titre à gauche
             const title = document.createElement("p");
             title.textContent = mediaItem.title;
             title.classList.add("media-title", "media-title-left");
-            titleLikesContainer.appendChild(title);
 
-            // Likes à droite (avec icône Font Awesome cliquable)
             const likesContainer = document.createElement("div");
             likesContainer.classList.add("media-likes", "media-likes-right");
 
@@ -289,37 +246,33 @@ function displayMediaGallery(media, photographerData) {
             likesCount.textContent = mediaItem.likes;
             likesContainer.appendChild(likesCount);
 
-            titleLikesContainer.appendChild(likesContainer);
-
-            // Écouteur d'événements sur le bouton "coeur" (limité à un like par média)
-            heartButton.addEventListener('click', function() {
-                if (!mediaItem.liked) { 
+            heartButton.addEventListener('click', function () {
+                if (!mediaItem.liked) {
                     mediaItem.likes++;
                     likesCount.textContent = mediaItem.likes;
-                    updateTotalLikesAndPrice(); // Fonction spécifique pour la mise à jour
-                    mediaItem.liked = true; 
+                    updateTotalLikesAndPrice();
+                    mediaItem.liked = true;
                 }
             });
 
+            titleLikesContainer.appendChild(title);
+            titleLikesContainer.appendChild(likesContainer);
             mediaItemDiv.appendChild(titleLikesContainer);
             gallery.appendChild(mediaItemDiv);
         });
     }
 
-    // Fonction pour mettre à jour l'état actif du bouton de tri
     function updateSortButtonActiveState(activeButton) {
         const sortButtons = document.querySelectorAll('.sort-button');
         sortButtons.forEach(button => button.classList.remove('active'));
         activeButton.classList.add('active');
     }
 
-    // Fonction pour ouvrir le slider
     function openSlider(index) {
         currentMediaIndex = index;
-        if (!slider) { // Initialisation du slider seulement si ce n'est pas déjà fait
+        if (!slider) {
             slider = document.createElement('div');
-            slider.classList.add('slider');
-            slider.classList.add('open');
+            slider.classList.add('slider', 'open');
             document.body.appendChild(slider);
 
             sliderContent = document.createElement('div');
@@ -345,68 +298,65 @@ function displayMediaGallery(media, photographerData) {
             slider.appendChild(closeButton);
         }
 
-        updateSlider(); 
+        updateSlider();
     }
 
-    // Fonction pour afficher le média précédent
     function showPreviousMedia() {
         currentMediaIndex = (currentMediaIndex - 1 + media.length) % media.length;
         updateSlider();
     }
 
-    // Fonction pour afficher le média suivant
     function showNextMedia() {
         currentMediaIndex = (currentMediaIndex + 1) % media.length;
         updateSlider();
     }
 
-    // Fonction pour mettre à jour le contenu du slider
     function updateSlider() {
-        const sliderContent = document.querySelector('.slider-content');
-        sliderContent.innerHTML = ''; // Effacer le contenu précédent
-
+        sliderContent.innerHTML = '';
         const mediaElement = media[currentMediaIndex];
+
         let sliderMedia;
         if (mediaElement.image) {
             sliderMedia = document.createElement('img');
             sliderMedia.src = `./assets/Sample Photos/${mediaElement.photographerId}/${mediaElement.image}`;
-            sliderMedia.alt = mediaElement.title; // Ajout de l'attribut alt pour l'image
+            sliderMedia.alt = mediaElement.title;
         } else if (mediaElement.video) {
             sliderMedia = document.createElement('video');
             sliderMedia.src = `./assets/Sample Photos/${mediaElement.photographerId}/${mediaElement.video}`;
             sliderMedia.controls = true;
-            sliderMedia.alt = mediaElement.title; // Ajout de l'attribut alt pour la vidéo
+            sliderMedia.alt = mediaElement.title;
         }
 
         sliderContent.appendChild(sliderMedia);
     }
-    
-    // Fonction pour fermer le slider
+
     function closeSlider() {
         const slider = document.querySelector('.slider');
-        if (slider) {
-            slider.remove();
-        }
+        if (slider) slider.remove();
     }
 
-    // 12. Gestion du menu déroulant
-    document.addEventListener('DOMContentLoaded', () => {
-        if (sortToggle && sortButtons) {
-            sortToggle.addEventListener('click', () => {
-                sortButtons.style.display = sortButtons.style.display === 'block' ? 'none' : 'block';
-                sortToggle.textContent = sortToggle.textContent === '▼' ? '▲' : '▼';
-            });
-        } else {
-            console.error("Éléments du menu déroulant non trouvés.");
+    // Accessibilité clavier dans le slider
+    document.addEventListener("keydown", function (e) {
+        const slider = document.querySelector(".slider.open");
+        if (!slider) return;
+
+        switch (e.key) {
+            case "ArrowRight":
+                showNextMedia();
+                break;
+            case "ArrowLeft":
+                showPreviousMedia();
+                break;
+            case "Escape":
+                closeSlider();
+                break;
         }
     });
 
-    // Fonction dédiée à la mise à jour des totaux
     async function updateTotalLikesAndPrice() {
         const totalLikes = mediaData.reduce((sum, media) => sum + media.likes, 0);
         const pricePerDay = (await getPhotographer()).price;
 
-        // Créer le conteneur si nécessaire
         let totalLikesPriceContainer = document.getElementById('total-likes-price');
         if (!totalLikesPriceContainer) {
             totalLikesPriceContainer = document.createElement('div');
@@ -415,7 +365,6 @@ function displayMediaGallery(media, photographerData) {
             document.body.appendChild(totalLikesPriceContainer);
         }
 
-        // Mettre à jour le contenu (ordre modifié)
         totalLikesPriceContainer.innerHTML = `
             <div id="total-likes">${totalLikes}</div>
             <i class="fas fa-heart"></i>
@@ -424,23 +373,19 @@ function displayMediaGallery(media, photographerData) {
         `;
     }
 
-    // 13. Appel initial pour afficher la galerie
     updateGallery();
-
-    // Appeler updateTotalLikesAndPrice pour l'affichage initial
     updateTotalLikesAndPrice();
 }
 
-//récupérer et afficher les données du photographe
+// Afficher les données du photographe
 async function displayPhotographer() {
-    // Obtenir l'ID à partir des paramètres de l'URL
     const urlParams = new URLSearchParams(window.location.search);
     photographerId = urlParams.get("id");
 
     if (photographerId) {
         const photographerData = await getPhotographer();
         if (photographerData) {
-            photographerTemplate(photographerData); // Appeler la fonction pour modifier la div
+            photographerTemplate(photographerData);
         } else {
             console.error("Aucun photographe trouvé avec cet ID.");
         }
@@ -449,7 +394,4 @@ async function displayPhotographer() {
     }
 }
 
-// Appeler la fonction d'affichage lorsque la page se charge
 displayPhotographer();
-
-
