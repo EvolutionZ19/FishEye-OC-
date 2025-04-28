@@ -337,7 +337,7 @@ form input {
 /* Styles pour le rectangle */
 .total-likes-price-container {
     position: fixed;
-    bottom: 20px;
+    bottom: 0px;
     right: 20px;
     background-color: #DB8876; 
     color: black;
